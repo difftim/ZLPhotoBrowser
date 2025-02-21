@@ -26,7 +26,7 @@
 
 import Foundation
 
-@objc public enum ZLLanguageType: Int {
+@objc public enum ZLLanguageType: Int, CaseIterable {
     case system
     case chineseSimplified
     case chineseTraditional
@@ -44,6 +44,7 @@ import Foundation
     case spanish
     case turkish
     case arabic
+    case dutch
     
     var key: String {
         var key = "en"
@@ -84,6 +85,8 @@ import Foundation
                 key = "tr"
             } else if key.hasPrefix("ar") {
                 key = "ar"
+            } else if key.hasPrefix("nl") {
+                key = "nl"
             } else {
                 key = "en"
             }
@@ -119,6 +122,8 @@ import Foundation
             key = "tr"
         case .arabic:
             key = "ar"
+        case .dutch:
+            key = "nl"
         }
         
         return key
@@ -147,11 +152,20 @@ public struct ZLLocalLanguageKey: Hashable {
     /// No Photo (无照片)
     public static let noPhotoTips = ZLLocalLanguageKey(rawValue: "noPhotoTips")
     
-    /// waiting... (正在处理...)
+    /// Loading (正在加载)
     public static let hudLoading = ZLLocalLanguageKey(rawValue: "hudLoading")
+    
+    /// Processing (正在处理)
+    public static let hudProcessing = ZLLocalLanguageKey(rawValue: "hudProcessing")
     
     /// Done (确定)
     public static let done = ZLLocalLanguageKey(rawValue: "done")
+    
+    /// Done (确定)
+    public static let cameraDone = ZLLocalLanguageKey(rawValue: "cameraDone")
+    
+    /// Done (确定)
+    public static let inputDone = ZLLocalLanguageKey(rawValue: "inputDone")
     
     /// OK (确定)
     public static let ok = ZLLocalLanguageKey(rawValue: "ok")
@@ -185,6 +199,9 @@ public struct ZLLocalLanguageKey: Hashable {
     
     /// Full Image (原图)
     public static let originalPhoto = ZLLocalLanguageKey(rawValue: "originalPhoto")
+    
+    /// Total (共)
+    public static let originalTotalSize = ZLLocalLanguageKey(rawValue: "originalTotalSize")
     
     /// Back (返回)
     public static let back = ZLLocalLanguageKey(rawValue: "back")
@@ -228,13 +245,21 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Min count for video selection: %ld (最少选择%ld个视频)
     public static let lessThanMinVideoSelectCount = ZLLocalLanguageKey(rawValue: "lessThanMinVideoSelectCount")
     
-    /// Unable to select video with a duration longer than %lds
+    /// Can't select videos longer than %lds
     /// (不能选择超过%ld秒的视频)
     public static let longerThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "longerThanMaxVideoDuration")
     
-    /// Unable to select video with a duration shorter than %lds
+    /// Can't select videos shorter than %lds
     /// (不能选择低于%ld秒的视频)
-    public static let shorterThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "shorterThanMaxVideoDuration")
+    public static let shorterThanMinVideoDuration = ZLLocalLanguageKey(rawValue: "shorterThanMinVideoDuration")
+    
+    /// Can't select videos larger than %@MB
+    /// (不能选择大于%@MB的视频)
+    public static let largerThanMaxVideoDataSize = ZLLocalLanguageKey(rawValue: "largerThanMaxVideoDataSize")
+    
+    /// Can't select videos smaller than %@MB
+    /// (不能选择小于%@MB的视频)
+    public static let smallerThanMinVideoDataSize = ZLLocalLanguageKey(rawValue: "smallerThanMinVideoDataSize")
     
     /// Unable to sync from iCloud (iCloud无法同步)
     public static let iCloudVideoLoadFaild = ZLLocalLanguageKey(rawValue: "iCloudVideoLoadFaild")
@@ -248,8 +273,11 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Tap to take photo (轻触拍照)
     public static let customCameraTakePhotoTips = ZLLocalLanguageKey(rawValue: "customCameraTakePhotoTips")
     
-    /// hold to record video (按住摄像)
+    /// Hold to record video (按住摄像)
     public static let customCameraRecordVideoTips = ZLLocalLanguageKey(rawValue: "customCameraRecordVideoTips")
+    
+    /// Tap to record video (轻触摄像)
+    public static let customCameraTapToRecordVideoTips = ZLLocalLanguageKey(rawValue: "customCameraTapToRecordVideoTips")
     
     /// Record at least %lds (至少录制%ld秒)
     public static let minRecordTimeTips = ZLLocalLanguageKey(rawValue: "minRecordTimeTips")

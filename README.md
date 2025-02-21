@@ -53,7 +53,7 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Requirements
  * iOS 10.0
  * Swift 5.x
- * Xcode 12.x
+ * Xcode 13.x
  
 ### Usage
  - Preview selection
@@ -91,27 +91,31 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.4.2
+● 4.5.8
   Add:
-    Preserve the alpha channel of the edited image.
+    Add video stabilization mode to camera configuration.
   Fix:
-    Fix a crash caused by UI modification in a sub-thread.
-● 4.4.1
+    Fix video recording with both torch-on and wide cameras.
+    Fixed the problem of freezing caused by calculating the frame when previewing network videos.
+    Fix the memory leak issue in the ZLEditImageViewController interface.
+    When there is no album permission, clicking on the album no longer displays the permission alert.
+    Correct eraser misalignment after image cropping.
+● 4.5.7
   Add:
-    Adapt to RTL.
-  Fix:
-    Fix the problem that the image editor does not work properly when the scale of the picture is not 1.
-    Fixed some UI display issue in the image preview interface.
-● 4.4.0
+    Custom camera supports tap-to-record mode.
+    Custom camera supports wide-angle lenses on iOS 13 and above.
+    Custom camera allows adding a custom overlay view.
+    Video editing controller adds a callback block for canceling edits.
+    Added `ZLImagePreviewControllerDelegate` protocol to receive event callbacks in ZLImagePreviewController.
+● 4.5.6
   Add:
-    Limit the maximum number of frames of GIF images to avoid crashes caused by loading too many frames of GIFs, and provide a series of blocks to support custom implementation of GIF image playback.
-    Modify the UI effect of text input in the image editor.
-    Support set the default camera position.
+    Support iOS18.
+    When saving pictures and videos, add error parameters in the callback.
 ...
 ```
 
 ### Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish, 🇸🇦 Arabic.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish, 🇸🇦 Arabic, 🇳🇱 Dutch.
 
 ### Installation
 There are four ways to use ZLPhotoBrowser in your project:
@@ -161,8 +165,8 @@ If you get an error like `Building universal frameworks with common architecture
 Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click this link](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md).
 
 #### Swift Package Manager
-1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.0.9" as its earliest version.
+1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.5.8" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support
