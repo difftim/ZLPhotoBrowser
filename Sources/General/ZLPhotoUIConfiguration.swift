@@ -26,6 +26,7 @@
 
 import UIKit
 
+/// In an application, most of the UI configurations related to the album are uniform. Therefore, this class attempts to extract properties that are not affected by different album selection scenarios, avoiding redundant configurations for each different selection scenario.
 /// Custom UI configuration (include colors, images, text, font)
 @objcMembers
 public class ZLPhotoUIConfiguration: NSObject {
@@ -46,6 +47,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     // MARK: Framework style.
     
+    /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
+    public var sortAscending = true
+    
     public var style: ZLPhotoBrowserStyle = .embedAlbumList
     
     public var statusBarStyle: UIStatusBarStyle = .lightContent
@@ -57,7 +61,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     public var showStatusBarInPreviewInterface = false
     
     /// HUD style. Defaults to dark.
-    public var hudStyle: ZLProgressHUD.HUDStyle = .dark
+    public var hudStyle: ZLProgressHUD.Style = .dark
     
     /// Adjust Slider Type
     public var adjustSliderType: ZLAdjustSliderType = .vertical
@@ -78,7 +82,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// - Note: This property is ignored when using columnCountBlock.
     public var columnCount: Int {
         get {
-            return pri_columnCount
+            pri_columnCount
         }
         set {
             pri_columnCount = min(6, max(newValue, 2))
@@ -94,6 +98,49 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// The minimum spacing to use between lines of items in the grid for `ZLThumbnailViewController`.
     public var minimumLineSpacing: CGFloat = 2
+    
+    /// In thumb image interface, control whether to display the selection button animation when selecting. Defaults to false.
+    public var animateSelectBtnWhenSelectInThumbVC = false
+    
+    /// In preview interface, control whether to display the selection button animation when selecting. Defaults to true.
+    public var animateSelectBtnWhenSelectInPreviewVC = true
+    
+    /// Animation duration for select button. Defaults to 0.5.
+    public var selectBtnAnimationDuration: CFTimeInterval = 0.5
+    
+    /// Whether to display the serial number above the selected button. Defaults to false.
+    public var showIndexOnSelectBtn = false
+    
+    /// Whether to display scroll to bottom button. Defaults to false.
+    public var showScrollToBottomBtn = false
+    
+    /// Show the image captured by the camera is displayed on the camera button inside the album. Defaults to false.
+    public var showCaptureImageOnTakePhotoBtn = false
+    
+    /// Overlay a mask layer on top of the selected photos. Defaults to true.
+    public var showSelectedMask = true
+    
+    /// Display a border on the selected photos cell. Defaults to false.
+    public var showSelectedBorder = false
+    
+    /// Overlay a mask layer above the cells that cannot be selected. Defaults to true.
+    public var showInvalidMask = true
+    
+    /// Display the selected photos at the bottom of the preview large photos interface. Defaults to true.
+    public var showSelectedPhotoPreview = true
+    
+    /// If user choose limited Photo mode, a button with '+' will be added to the ZLThumbnailViewController. It will call PHPhotoLibrary.shared().presentLimitedLibraryPicker(from:) to add photo. Defaults to true.
+    public var showAddPhotoButton = true
+    
+    /// iOS14 limited Photo mode, will show collection footer view in ZLThumbnailViewController.
+    /// Will go to system setting if clicked. Defaults to true.
+    public var showEnterSettingTips = true
+
+    /// Center tools in tools bar. Defaults to false.
+    public var shouldCenterTools = false
+
+    /// Timeout for image parsing. Defaults to 20.
+    public var timeout: TimeInterval = 20
     
     // MARK: Navigation and bottom tool bar
     
@@ -187,7 +234,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// The theme color of framework.
     /// 框架主题色
-    public var themeColor: UIColor = .zl.rgba(7, 213, 101)
+    public var themeColor: UIColor = .zl.rgba(0, 193, 94)
     
     /// Preview selection mode, translucent background color above.
     /// 预览快速选择模式下，上方透明区域背景色
@@ -206,7 +253,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览快速选择模式下，按钮标题高亮颜色
     public var sheetBtnTitleTintColor: UIColor {
         get {
-            return pri_sheetBtnTitleTintColor ?? themeColor
+            pri_sheetBtnTitleTintColor ?? themeColor
         }
         set {
             pri_sheetBtnTitleTintColor = newValue
@@ -215,11 +262,11 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// A color for navigation bar.
     /// 相册列表及小图界面导航条背景色
-    public var navBarColor: UIColor = .zl.rgba(160, 160, 160, 0.65)
+    public var navBarColor: UIColor = .zl.rgba(140, 140, 140, 0.75)
     
     /// A color for navigation bar in preview interface.
     /// 预览大图界面的导航条背景色
-    public var navBarColorOfPreviewVC: UIColor = .zl.rgba(160, 160, 160, 0.65)
+    public var navBarColorOfPreviewVC: UIColor = .zl.rgba(50, 50, 50)
     
     /// A color for Navigation bar text.
     /// 相册列表及小图界面导航栏标题颜色
@@ -255,7 +302,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// A color for background in thumbnail interface.
     /// 相册小图界面背景色
-    public var thumbnailBgColor: UIColor = .zl.rgba(50, 50, 50)
+    public var thumbnailBgColor: UIColor = .zl.rgba(25, 25, 25)
     
     /// A color for background in preview interface..
     /// 预览大图界面背景色
@@ -268,6 +315,14 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// A color for background in bottom tool view in preview interface.
     /// 预览大图界面底部工具条背景色
     public var bottomToolViewBgColorOfPreviewVC: UIColor = .zl.rgba(35, 35, 35, 0.3)
+    
+    /// Title color of the original image size label in the album thumbnail interface.
+    /// 相册小图界面原图大小label的text颜色
+    public var originalSizeLabelTextColor: UIColor = .zl.rgba(130, 130, 130)
+    
+    /// Title color of the original image size label in the preview interface.
+    /// 预览大图界面原图大小label的text颜色
+    public var originalSizeLabelTextColorOfPreviewVC: UIColor = .zl.rgba(130, 130, 130)
     
     /// The normal state title color of bottom tool view buttons. Without done button.
     /// 相册小图界面底部按钮可交互状态下标题颜色，不包括 `完成` 按钮
@@ -306,7 +361,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 相册小图界面底部按钮可交互状态下背景色
     public var bottomToolViewBtnNormalBgColor: UIColor {
         get {
-            return pri_bottomToolViewBtnNormalBgColor ?? themeColor
+            pri_bottomToolViewBtnNormalBgColor ?? themeColor
         }
         set {
             pri_bottomToolViewBtnNormalBgColor = newValue
@@ -318,7 +373,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览大图界面底部按钮可交互状态下背景色
     public var bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor {
         get {
-            return pri_bottomToolViewBtnNormalBgColorOfPreviewVC ?? themeColor
+            pri_bottomToolViewBtnNormalBgColorOfPreviewVC ?? themeColor
         }
         set {
             pri_bottomToolViewBtnNormalBgColorOfPreviewVC = newValue
@@ -342,7 +397,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 自定义相机录制视频时进度条颜色
     public var cameraRecodeProgressColor: UIColor {
         get {
-            return pri_cameraRecodeProgressColor ?? themeColor
+            pri_cameraRecodeProgressColor ?? themeColor
         }
         set {
             pri_cameraRecodeProgressColor = newValue
@@ -351,14 +406,14 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// Mask layer color of selected cell.
     /// 已选择照片上方遮罩阴影颜色
-    public var selectedMaskColor: UIColor = .black.withAlphaComponent(0.2)
+    public var selectedMaskColor: UIColor = .black.withAlphaComponent(0.45)
     
     private var pri_selectedBorderColor: UIColor?
     /// Border color of selected cell.
     /// 已选择照片border颜色
     public var selectedBorderColor: UIColor {
         get {
-            return pri_selectedBorderColor ?? themeColor
+            pri_selectedBorderColor ?? themeColor
         }
         set {
             pri_selectedBorderColor = newValue
@@ -367,18 +422,18 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// Mask layer color of the cell that cannot be selected.
     /// 不可选的照片上方遮罩阴影颜色
-    public var invalidMaskColor: UIColor = .white.withAlphaComponent(0.5)
+    public var invalidMaskColor: UIColor = .zl.rgba(32, 32, 32, 0.85)
     
     /// The text color of selected cell index label.
     /// 已选照片右上角序号label背景色
-    public var indexLabelTextColor: UIColor = .white
+    public var indexLabelTextColor: UIColor = .zl.rgba(220, 220, 220)
     
     private var pri_indexLabelBgColor: UIColor?
     /// The background color of selected cell index label.
     /// 已选照片右上角序号label背景色
     public var indexLabelBgColor: UIColor {
         get {
-            return pri_indexLabelBgColor ?? themeColor
+            pri_indexLabelBgColor ?? (showIndexOnSelectBtn ? themeColor : .clear)
         }
         set {
             pri_indexLabelBgColor = newValue
@@ -398,7 +453,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景高亮色
     public var adjustSliderTintColor: UIColor {
         get {
-            return pri_adjustSliderTintColor ?? themeColor
+            pri_adjustSliderTintColor ?? themeColor
         }
         set {
             pri_adjustSliderTintColor = newValue
