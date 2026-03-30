@@ -124,9 +124,9 @@ class ZLPhotoPreviewController: UIViewController {
     }()
     
     private lazy var originalBtn: UIButton = {
-        let btn = createBtn(localLanguageTextValue(.originalPhoto), #selector(originalPhotoClick))
-        btn.titleLabel?.lineBreakMode = .byCharWrapping
-        btn.titleLabel?.numberOfLines = 2
+        let btn = createBtn(ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto), #selector(originalPhotoClick))
+        btn.titleLabel?.lineBreakMode = .byTruncatingTail
+        btn.titleLabel?.numberOfLines = 1
         btn.contentHorizontalAlignment = .left
         btn.setImage(.zl.getImage("zl_btn_original_circle"), for: .normal)
         btn.setImage(.zl.getImage("zl_btn_original_selected"), for: .selected)
@@ -318,7 +318,7 @@ class ZLPhotoPreviewController: UIViewController {
         let editBtnW = editTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
         editBtn.frame = CGRect(x: 15, y: btnY, width: min(btnMaxWidth, editBtnW), height: btnH)
         
-        let originalTitle = localLanguageTextValue(.originalPhoto)
+        let originalTitle = ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto)
         let originBtnW = originalTitle.zl.boundingRect(
             font: ZLLayout.bottomToolTitleFont,
             limitSize: CGSize(
@@ -326,7 +326,8 @@ class ZLPhotoPreviewController: UIViewController {
                 height: 30
             )
         ).width + (originalBtn.currentImage?.size.width ?? 19) + 12
-        let originBtnMaxW = min(btnMaxWidth, originBtnW)
+        let sideMargin = editBtn.isHidden ? 30.0 : (editBtn.frame.maxX + 10)
+        let originBtnMaxW = min(bottomView.bounds.width - sideMargin * 2, originBtnW)
         originalBtn.frame = CGRect(x: (bottomView.zl.width - originBtnMaxW) / 2 - 5, y: btnY, width: originBtnMaxW, height: btnH)
         originalLabel.frame = CGRect(
             x: (bottomView.zl.width - btnMaxWidth) / 2 - 5,

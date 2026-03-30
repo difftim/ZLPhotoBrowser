@@ -179,6 +179,9 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// Allow select full image. Defaults to true.
     public var allowSelectOriginal = true
+
+    /// Custom title for the original button. When set, overrides the default localized "Full Image" text.
+    public var originalBtnTitle: String?
     
     /// Always return the original photo.
     /// - warning: Only valid when `allowSelectOriginal = false`, Defaults to false.
