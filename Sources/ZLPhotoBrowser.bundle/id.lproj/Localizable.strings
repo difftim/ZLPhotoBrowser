@@ -3,7 +3,8 @@
 "previewAlbum" = "Album";
 "cancel" = "Membatalkan";
 
-"originalPhoto" = "Asli (Video 1080p)";
+"originalPhoto" = "Asli";
+"originalPhotoVideo" = "Asli (Video 1080p)";
 "originalTotalSize" = "Total";
 "done" = "Selesai";
 "ok" = "Oke";

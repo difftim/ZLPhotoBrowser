@@ -318,7 +318,7 @@ class ZLPhotoPreviewController: UIViewController {
         let editBtnW = editTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
         editBtn.frame = CGRect(x: 15, y: btnY, width: min(btnMaxWidth, editBtnW), height: btnH)
         
-        let originalTitle = ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto)
+        let originalTitle = originalBtn.currentTitle ?? (ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto))
         let originBtnW = originalTitle.zl.boundingRect(
             font: ZLLayout.bottomToolTitleFont,
             limitSize: CGSize(
@@ -485,15 +485,30 @@ class ZLPhotoPreviewController: UIViewController {
         }
     }
     
+    private func originalBtnTitle(for selectedModels: [ZLPhotoModel]) -> String {
+        let hasVideo = selectedModels.contains { $0.type == .video }
+        if hasVideo {
+            return ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhotoVideo)
+        }
+        return ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto)
+    }
+
+    private func refreshOriginalBtnTitle() {
+        let nav = navigationController as? ZLImageNavController
+        let selectedModels = nav?.arrSelectedModels ?? []
+        let title = originalBtnTitle(for: selectedModels)
+        originalBtn.setTitle(title, for: .normal)
+    }
+
     private func resetSubviewStatus() {
         guard let nav = navigationController as? ZLImageNavController else {
             zlLoggerInDebug("Navigation controller is null")
             return
         }
-        
+
         let config = ZLPhotoConfiguration.default()
         let currentModel = arrDataSources[currentIndex]
-        
+
         if (!config.allowMixSelect && currentModel.type == .video) ||
             (!config.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
             selectBtn.isHidden = true
@@ -502,19 +517,20 @@ class ZLPhotoPreviewController: UIViewController {
         }
         selectBtn.isSelected = arrDataSources[currentIndex].isSelected
 //        resetIndexLabelStatus()
-        
+
         guard showBottomViewAndSelectBtn else {
             selectBtn.isHidden = true
             bottomView.isHidden = true
             return
         }
         let selCount = nav.arrSelectedModels.count
+        refreshOriginalBtnTitle()
         var doneTitle = localLanguageTextValue(.done)
         if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn, selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
         }
         doneBtn.setTitle(doneTitle, for: .normal)
-        
+
         selPhotoPreview?.isHidden = selCount == 0
         refreshOriginalLabelText()
         refreshBottomViewFrame()

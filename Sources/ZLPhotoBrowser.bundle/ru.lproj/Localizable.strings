@@ -3,7 +3,8 @@
 "previewAlbum" = "Альбом";
 "cancel" = "Отмена";
 
-"originalPhoto" = "Оригинал (Видео 1080p)";
+"originalPhoto" = "Оригинал";
+"originalPhotoVideo" = "Оригинал (Видео 1080p)";
 "originalTotalSize" = "Всего";
 "done" = "Готово";
 "ok" = "в порядке";

@@ -3,7 +3,8 @@
 "previewAlbum" = "Imej";
 "cancel" = "Batal";
 
-"originalPhoto" = "Asal (Video 1080p)";
+"originalPhoto" = "Asal";
+"originalPhotoVideo" = "Asal (Video 1080p)";
 "originalTotalSize" = "Jumlah";
 "done" = "Selesai";
 "ok" = "Okey";

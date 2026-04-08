@@ -3,7 +3,8 @@
 "previewAlbum" = "Hình ảnh";
 "cancel" = "Huỷ";
 
-"originalPhoto" = "Gốc (Video 1080p)";
+"originalPhoto" = "Gốc";
+"originalPhotoVideo" = "Gốc (Video 1080p)";
 "originalTotalSize" = "Tổng cộng";
 "done" = "Xong";
 "ok" = "đồng ý";

@@ -374,7 +374,7 @@ class ZLThumbnailViewController: UIViewController {
             let previewBtnW = previewTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
             previewBtn.frame = CGRect(x: 15, y: btnY, width: min(btnMaxWidth, previewBtnW), height: btnH)
             
-            let originalTitle = ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto)
+            let originalTitle = originalBtn.currentTitle ?? (ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto))
             let originBtnW = originalTitle.zl.boundingRect(
                 font: ZLLayout.bottomToolTitleFont,
                 limitSize: CGSize(
@@ -858,12 +858,28 @@ class ZLThumbnailViewController: UIViewController {
         }
     }
     
+    private func originalBtnTitle(for selectedModels: [ZLPhotoModel]) -> String {
+        let hasVideo = selectedModels.contains { $0.type == .video }
+        if hasVideo {
+            return ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhotoVideo)
+        }
+        return ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto)
+    }
+
+    private func refreshOriginalBtnTitle() {
+        let nav = navigationController as? ZLImageNavController
+        let selectedModels = nav?.arrSelectedModels ?? []
+        let title = originalBtnTitle(for: selectedModels)
+        originalBtn.setTitle(title, for: .normal)
+    }
+
     private func resetBottomToolBtnStatus() {
         guard shouldShowBottomToolBar() else { return }
         guard let nav = navigationController as? ZLImageNavController else {
             zlLoggerInDebug("Navigation controller is null")
             return
         }
+        refreshOriginalBtnTitle()
         var doneTitle = localLanguageTextValue(.done)
         if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn,
            !nav.arrSelectedModels.isEmpty {

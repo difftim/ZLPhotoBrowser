@@ -3,7 +3,8 @@
 "previewAlbum" = "アルバム";
 "cancel" = "キャンセル";
 
-"originalPhoto" = "オリジナル（動画1080p）";
+"originalPhoto" = "オリジナル";
+"originalPhotoVideo" = "オリジナル（動画1080p）";
 "originalTotalSize" = "合計";
 "done" = "確定";
 "ok" = "確定";

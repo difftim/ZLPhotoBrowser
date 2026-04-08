@@ -3,7 +3,8 @@
 "previewAlbum" = "이미지";
 "cancel" = "취소";
 
-"originalPhoto" = "원본 (영상 1080p)";
+"originalPhoto" = "원본";
+"originalPhotoVideo" = "원본 (영상 1080p)";
 "originalTotalSize" = "총";
 "done" = "확인";
 "ok" = "확인";

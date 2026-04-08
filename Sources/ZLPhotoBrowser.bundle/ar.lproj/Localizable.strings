@@ -3,7 +3,8 @@
 "previewAlbum" = "البوم";
 "cancel" = "إلغاء";
 
-"originalPhoto" = "الأصل (فيديو 1080p)";
+"originalPhoto" = "الأصل";
+"originalPhotoVideo" = "الأصل (فيديو 1080p)";
 "originalTotalSize" = "مجموع";
 "done" = "تم";
 "ok" = "حسنا";

@@ -3,7 +3,8 @@
 "previewAlbum" = "Album";
 "cancel" = "Annuler";
 
-"originalPhoto" = "Original (Vidéo 1080p)";
+"originalPhoto" = "Original";
+"originalPhotoVideo" = "Original (Vidéo 1080p)";
 "originalTotalSize" = "Total";
 "done" = "Terminé";
 "ok" = "D'accord";
