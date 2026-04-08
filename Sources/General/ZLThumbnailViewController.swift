@@ -899,6 +899,7 @@ class ZLThumbnailViewController: UIViewController {
         originalBtn.isSelected = nav.isSelectedOriginal
         refreshOriginalLabelText()
         refreshDoneBtnFrame()
+        view.setNeedsLayout()
     }
     
     private func refreshOriginalLabelText() {
