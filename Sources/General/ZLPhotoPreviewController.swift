@@ -137,6 +137,8 @@ class ZLPhotoPreviewController: UIViewController {
         config.imagePadding = 5
         // 去掉 .plain() 默认的外边距，保持与原布局一致
         config.contentInsets = .zero
+        // .plain() 在 isSelected 时会自动绘制 tint 色的选中背景，这里强制透明
+        config.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in .clear }
         // 标题字体（替代原先 createBtn 里的 titleLabel?.font）
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming

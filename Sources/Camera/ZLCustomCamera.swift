@@ -140,6 +140,8 @@ open class ZLCustomCamera: UIViewController {
         
         var config = UIButton.Configuration.plain()
         config.contentInsets = .zero
+        // .plain() 在 isSelected 时会自动绘制 tint 色的选中背景，这里强制透明
+        config.background.backgroundColorTransformer = UIConfigurationColorTransformer { _ in .clear }
         
         let btn = ZLEnlargeButton(configuration: config)
         btn.addTarget(self, action: #selector(flashBtnClick), for: .touchUpInside)
