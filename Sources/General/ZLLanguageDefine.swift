@@ -216,6 +216,9 @@ public struct ZLLocalLanguageKey: Hashable, Sendable {
     /// Full Image (原图)
     public static let originalPhoto = ZLLocalLanguageKey(rawValue: "originalPhoto")
     
+    /// Full Image with video (原图（视频1080p）)
+    public static let originalPhotoVideo = ZLLocalLanguageKey(rawValue: "originalPhotoVideo")
+    
     /// Total (共)
     public static let originalTotalSize = ZLLocalLanguageKey(rawValue: "originalTotalSize")
     

@@ -76,7 +76,8 @@ class ZLThumbnailViewController: UIViewController {
         let selectedImage = UIImage.zl.getImage("zl_btn_original_selected")
         
         var config = UIButton.Configuration.plain()
-        config.title = localLanguageTextValue(.originalPhoto)
+        config.title = ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto)
+        config.titleLineBreakMode = .byTruncatingTail
         // 图片和标题之间的间距（替代原先的 titleEdgeInsets，自动适配 RTL）
         config.imagePadding = 5
         // 去掉 .plain() 默认的外边距，保持与原布局一致
@@ -90,8 +91,8 @@ class ZLThumbnailViewController: UIViewController {
         
         let btn = UIButton(configuration: config)
         btn.contentHorizontalAlignment = .leading
-        btn.titleLabel?.lineBreakMode = .byCharWrapping
-        btn.titleLabel?.numberOfLines = 2
+        btn.titleLabel?.lineBreakMode = .byTruncatingTail
+        btn.titleLabel?.numberOfLines = 1
         btn.addTarget(self, action: #selector(originalPhotoClick), for: .touchUpInside)
         // 按状态切换图片和标题颜色（替代原先的多个 setImage / setTitleColor）
         btn.configurationUpdateHandler = { button in
@@ -396,7 +397,7 @@ class ZLThumbnailViewController: UIViewController {
             let previewBtnW = previewTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
             previewBtn.frame = CGRect(x: insets.left + 15, y: btnY, width: min(btnMaxWidth, previewBtnW), height: btnH)
             
-            let originalTitle = localLanguageTextValue(.originalPhoto)
+            let originalTitle = originalBtn.configuration?.title ?? localLanguageTextValue(.originalPhoto)
             let originBtnW = originalTitle.zl.boundingRect(
                 font: ZLLayout.bottomToolTitleFont,
                 limitSize: CGSize(
@@ -405,7 +406,9 @@ class ZLThumbnailViewController: UIViewController {
                 )
             ).width + (originalBtn.configuration?.image?.size.width ?? 19) + 12
             
-            let originBtnMaxW = min(btnMaxWidth, originBtnW)
+            // Allow the title to use the space between the preview and done buttons instead of a fixed third.
+            let sideMargin = previewBtn.isHidden ? 30.0 : (previewBtn.zl.right - insets.left + 10)
+            let originBtnMaxW = min(totalWidth - sideMargin * 2, originBtnW)
             originalBtn.frame = CGRect(
                 x: (totalWidth - originBtnMaxW) / 2 + insets.left - 5,
                 y: btnY,
@@ -963,12 +966,26 @@ class ZLThumbnailViewController: UIViewController {
         }
     }
     
+    private func originalBtnTitle(for selectedModels: [ZLPhotoModel]) -> String {
+        if let customTitle = ZLPhotoConfiguration.default().originalBtnTitle {
+            return customTitle
+        }
+        let hasVideo = selectedModels.contains { $0.type == .video }
+        return localLanguageTextValue(hasVideo ? .originalPhotoVideo : .originalPhoto)
+    }
+
+    private func refreshOriginalBtnTitle() {
+        let selectedModels = (navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
+        originalBtn.configuration?.title = originalBtnTitle(for: selectedModels)
+    }
+
     private func resetBottomToolBtnStatus() {
         guard shouldShowBottomToolBar() else { return }
         guard let nav = navigationController as? ZLImageNavController else {
             zlLoggerInDebug("Navigation controller is null")
             return
         }
+        refreshOriginalBtnTitle()
         var doneTitle = localLanguageTextValue(.done)
         if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn,
            !nav.arrSelectedModels.isEmpty {
@@ -988,6 +1005,7 @@ class ZLThumbnailViewController: UIViewController {
         originalBtn.isSelected = nav.isSelectedOriginal
         refreshOriginalLabelText()
         refreshDoneBtnFrame()
+        view.setNeedsLayout()
     }
     
     private func refreshOriginalLabelText() {

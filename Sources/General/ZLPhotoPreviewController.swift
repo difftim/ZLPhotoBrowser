@@ -131,7 +131,8 @@ class ZLPhotoPreviewController: UIViewController {
         let selectedImage = UIImage.zl.getImage("zl_btn_original_selected")
         
         var config = UIButton.Configuration.plain()
-        config.title = localLanguageTextValue(.originalPhoto)
+        config.title = ZLPhotoConfiguration.default().originalBtnTitle ?? localLanguageTextValue(.originalPhoto)
+        config.titleLineBreakMode = .byTruncatingTail
         // 图片和标题之间的间距（替代原先的 titleEdgeInsets，自动适配 RTL）
         config.imagePadding = 5
         // 去掉 .plain() 默认的外边距，保持与原布局一致
@@ -145,8 +146,8 @@ class ZLPhotoPreviewController: UIViewController {
         
         let btn = UIButton(configuration: config)
         btn.contentHorizontalAlignment = .leading
-        btn.titleLabel?.lineBreakMode = .byCharWrapping
-        btn.titleLabel?.numberOfLines = 2
+        btn.titleLabel?.lineBreakMode = .byTruncatingTail
+        btn.titleLabel?.numberOfLines = 1
         btn.addTarget(self, action: #selector(originalPhotoClick), for: .touchUpInside)
         // 按状态切换图片和标题颜色（替代原先的多个 setImage / setTitleColor）
         btn.configurationUpdateHandler = { button in
@@ -356,7 +357,7 @@ class ZLPhotoPreviewController: UIViewController {
         let editBtnW = editTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
         editBtn.frame = CGRect(x: insets.left + 15, y: btnY, width: min(btnMaxWidth, editBtnW), height: btnH)
         
-        let originalTitle = localLanguageTextValue(.originalPhoto)
+        let originalTitle = originalBtn.configuration?.title ?? localLanguageTextValue(.originalPhoto)
         let originBtnW = originalTitle.zl.boundingRect(
             font: ZLLayout.bottomToolTitleFont,
             limitSize: CGSize(
@@ -366,7 +367,9 @@ class ZLPhotoPreviewController: UIViewController {
         ).width + (originalBtn.configuration?.image?.size.width ?? 19) + 12
         
         let totalW = bottomView.zl.width - insets.left - insets.right
-        let originBtnMaxW = min(btnMaxWidth, originBtnW)
+        // Allow the title to use the space between the edit and done buttons instead of a fixed third.
+        let sideMargin = editBtn.isHidden ? 30.0 : (editBtn.zl.right - insets.left + 10)
+        let originBtnMaxW = min(totalW - sideMargin * 2, originBtnW)
         originalBtn.frame = CGRect(x: (totalW - originBtnMaxW) / 2 + insets.left - 5, y: btnY, width: originBtnMaxW, height: btnH)
         originalLabel.frame = CGRect(
             x: (totalW - btnMaxWidth) / 2 + insets.left - 5,
@@ -549,6 +552,7 @@ class ZLPhotoPreviewController: UIViewController {
             return
         }
         let selCount = nav.arrSelectedModels.count
+        refreshOriginalBtnTitle()
         var doneTitle = localLanguageTextValue(.done)
         if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn, selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
@@ -584,6 +588,19 @@ class ZLPhotoPreviewController: UIViewController {
         }
     }
     
+    private func originalBtnTitle(for selectedModels: [ZLPhotoModel]) -> String {
+        if let customTitle = ZLPhotoConfiguration.default().originalBtnTitle {
+            return customTitle
+        }
+        let hasVideo = selectedModels.contains { $0.type == .video }
+        return localLanguageTextValue(hasVideo ? .originalPhotoVideo : .originalPhoto)
+    }
+
+    private func refreshOriginalBtnTitle() {
+        let selectedModels = (navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
+        originalBtn.configuration?.title = originalBtnTitle(for: selectedModels)
+    }
+
     private func refreshOriginalLabelText() {
         guard ZLPhotoConfiguration.default().showOriginalSizeWhenSelectOriginal else {
             return

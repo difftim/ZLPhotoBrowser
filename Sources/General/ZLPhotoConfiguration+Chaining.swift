@@ -167,6 +167,12 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func originalBtnTitle(_ value: String?) -> ZLPhotoConfiguration {
+        originalBtnTitle = value
+        return self
+    }
+    
+    @discardableResult
     func alwaysRequestOriginal(_ value: Bool) -> ZLPhotoConfiguration {
         alwaysRequestOriginal = value
         return self
