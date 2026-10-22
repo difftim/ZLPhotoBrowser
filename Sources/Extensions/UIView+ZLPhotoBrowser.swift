@@ -120,6 +120,7 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
         }
         
         // 分屏/折叠下，另一半屏的挖孔 inset 会被系统报过来，这里按边缘归属过滤掉
+        #if canImport(UIKit, _version: 9127.0.85) // iOS 27.1 SDK, which adds verticalBarEdge
         if #available(iOS 27.1, *) {
             if let screen = base.window?.screen {
                 if !CGRectEqualToRect(base.bounds, screen.bounds) {
@@ -141,6 +142,7 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
                 }
             }
         }
+        #endif
         
         return insets
     }
